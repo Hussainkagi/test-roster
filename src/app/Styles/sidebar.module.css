@@ -1,0 +1,30 @@
+/* module.css */
+.sidebar {
+    width:60px;
+    position: fixed;
+    height: 100%;
+    background-color: #000; /* Black color */
+    color: #fff; /* White text color */
+  }
+  
+  .sidebar-sticky {
+    padding-top: 20px;
+    position: fixed;
+  }
+  
+  .sidebar a {
+    color: #fff; 
+  }
+  
+  .sidebar a:hover {
+    color: #ccc; /* Change link color on hover as needed */
+  }
+  .logo{
+    left: 15px;
+    margin-top: 20px;
+  }
+  .list{
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+  }

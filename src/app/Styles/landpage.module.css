@@ -1,0 +1,204 @@
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  padding: 38px;
+  background-color: #202020;
+}
+
+
+.teamInput {
+  background: transparent;
+  color: #fff;
+  margin-right: 20px;
+  border: none;
+  box-shadow: none;
+  width: 100%;
+  padding: 0;
+
+}
+.teamInput:focus {
+  background: transparent;
+  color: #fff;
+}
+.teamInput:disabled{
+  background: transparent;
+  color: #fff;
+  margin-right: 20px;
+  border: none;
+  box-shadow: none;
+  width: 100%;
+  padding: 0;
+}
+.teamName {
+  color: #fea013;
+  margin-bottom: 0;
+}
+.heading {
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.tabHead{
+  width: 80%;
+  margin-bottom: .5rem;
+}
+
+.inputBox_container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  max-width: 14em;
+  width: fit-content;
+  height: fit-content;
+  background-color: transparent;
+  border-radius: 0.8em;
+  overflow: hidden;
+  border: 3px solid #2a2a2a;
+}
+
+.searchIcon {
+  height: 1em;
+  padding: 0 0.5em 0 0.8em;
+  fill: #abb2bf;
+}
+
+.inputBox {
+  background-color: transparent;
+  color: #ffffff;
+  outline: none;
+  width: 180px;
+  margin-right: .5rem;
+  border: 0;
+  padding: 0.5em 1.5em 0.5em 0;
+  font-size: 1em;
+}
+
+.import_btn {
+  height: 44px;
+  width: 132px;
+  background-color: #fea013;
+  border-radius: 8px;
+  color: #fff;
+  outline: none;
+  border: none;
+}
+
+.tableBody {
+  border-radius: 8px;
+  /* margin: 25px 0 0 108px; */
+  width: 80%;
+    height: 80%;
+  background-color: #2d2d2d;
+  margin-bottom: 30px;
+  
+}
+.table> :not(caption)>*>*{
+    border-radius: 8px;
+    padding: 10px 20px;
+   background-color: #2d2d2d;
+   border-bottom: none;
+}
+.pencil{
+  cursor: pointer;
+}
+.col{
+    font-weight: normal;
+    font-size: 12px;
+    text-wrap: nowrap;
+}
+.row{
+  font-weight: normal;
+    font-size: 14px;
+}
+.table_img{
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+}
+
+.empty_screen{
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.empty_title{
+  display: flex;
+  justify-content: center;
+  color: #fff;
+}
+.import_link{
+  width: 130px;
+  height: 50px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fea013;
+}
+
+.import_container{
+  width: 100%
+}
+
+.import_head{
+  padding: 20px 10px;
+  border-bottom:  1px solid #fff;
+  margin-bottom: 40px;
+}
+
+.customFileInput{
+  background-color: transparent;
+  padding: 10px;
+  border: 1px solid #494949;
+  border-radius: 8px;
+
+}
+.import_input{
+  background-color: transparent;
+  padding: 10px;
+  border: 1px solid #494949;
+  border-radius: 8px;
+}
+
+.imp_btn{
+  background-color: transparent;
+}
+
+.footer_btn{
+  margin-top: 100px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.footer_btn button{
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #7e7e7e;
+}
+.popover {
+  display: block;
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: #fff;
+border: 1px solid #ccc;
+padding: 10px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+z-index: 1000;
+}
+
+.popover.show {
+display: block;
+}
+
