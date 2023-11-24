@@ -73,7 +73,7 @@ const ground = () => {
           </main>
         </div>
       </div>
-      {false && (
+      {true && (
         <>
           {
             <Modal onClose={modalAction} size={'sm'} icon={false}>

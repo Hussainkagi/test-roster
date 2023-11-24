@@ -1,24 +1,42 @@
 // Dashboard.js
 'use client';
 import { React, useEffect, useState, useContext, useRef } from 'react';
-import { UilPen, UilCheck } from '@iconscout/react-unicons';
+import { UilPen, UilCheck, UilTrashAlt  } from '@iconscout/react-unicons';
 import styles from '../Styles/landpage.module.css';
 import Modal from './Modal';
 import * as Papa from 'papaparse';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch } from 'react-redux';
 import { setCsvData } from '@/Global/cvAction';
-
+import {  Form, Row, Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 
 const LandPage = () => {
   const dispatch = useDispatch();
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isActionModal , setIsActionModal] = useState(false);
+  const [isDelete , setIsDelete] = useState(false);
+  const [isEdit , setIsEdit] = useState(false);
   const [teamName, setTeamName] = useState('team name');
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
   const [csvData1, setCsvDataPlayer] = useState([]);
+
+  const [formData, setFormData] = useState({
+    name: '',
+    number: '',
+    height: '',
+    weight: '',
+    nationality: '',
+    position: '',
+    starter: '',
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
  
 
   const csvData = useSelector((state) => state.csv.csvData);
@@ -27,9 +45,22 @@ const LandPage = () => {
 
 
 
-  const modalAction = () => {
-    setModalOpen(!isModalOpen);
+  const modalAction = (pass) => {
+    // debugger;
+    switch(pass){
+      case 'import' :
+        setModalOpen(false);
+      case 'action' :
+        setIsActionModal(false);
+      case 'delete' :
+        setIsDelete(false);
+      case 'edit' :
+        setIsEdit(false);
+
+    }
+    
   };
+  
 
 
   const handleFileUpload = async (event) => {
@@ -43,7 +74,6 @@ const LandPage = () => {
 
       const headers = parsedData.data[0];
 
-      // Create an array of player objects
       const playerObjects = parsedData.data.slice(1).map((playerData) => {
         const playerObject = {};
         headers.forEach((header, index) => {
@@ -87,6 +117,165 @@ const LandPage = () => {
     setTeamName(e.target.value);
     setIsChanging(true);
   };
+
+  const renderImportModal = (
+    <>
+    <div className={styles.import_container}>
+                <h3 className={styles.import_head}>Importer</h3>
+                <p>Roster File</p>
+                <div class='input-group mb-3'>
+                  <input
+                    id='file-input'
+                    type='file'
+                    class='form-control'
+                    placeholder='No file Selected'
+                    aria-label="Recipient's username"
+                    aria-describedby='basic-addon2'
+                    className={styles.import_input}
+                    onChange={handleFileUpload}
+                  />
+                  <div
+                    class='input-group-append'
+                    className={styles.import_input}
+                  >
+                    <label
+                      htmlFor='file-input'
+                      class='input-group-text'
+                      id='basic-addon2'
+                      className={styles.imp_btn}
+                    >
+                      Select File
+                    </label>
+                  </div>
+                </div>
+                <p style={{ color: '#7e7e7e' }}>File must be .csv file</p>
+              </div>
+              <div className={styles.footer_btn}>
+                <button>import</button>
+              </div>
+              </>
+  )
+
+  const renderDeleteModal = (
+          <div className={styles.delete_container}>
+            <h4>Are you sure ?</h4>
+
+            <p> the action cannot be undone </p>
+
+            <div className={styles.action_btn}>
+              <button className={styles.cancel_btn} onClick={()=> setIsDelete(false)}>Cancel</button>
+              <button className={styles.delete_btn}>Delete</button>
+            </div>
+          </div>
+  )
+
+  const renderActionModal = (
+          <div className={styles.action_container}>
+            <h4>Actions</h4>
+            <div className={styles.sub_action} onClick={()=>{
+
+              setIsEdit(true);
+              setIsActionModal(false);
+            }}>
+              <UilPen size='18px' color='#999999'/> Edit
+            </div>
+            <div className={styles.sub_action} onClick={()=>{
+              setIsDelete(true);
+              setIsActionModal(false);
+            }}>
+              <UilTrashAlt size='18px' color='#999999'/> Delete
+            </div>
+          </div>
+  )
+
+  const renderEditForm = (
+    <Form>
+      <h4>Edit Player</h4>
+          <Row className={styles.form_row}>
+            <Col className=''>
+            <label htmlFor="" className={styles.form_label}>Player Name</label>
+              <Form.Control type="text"  name="name" onChange={handleInputChange} className={styles.form_input} />
+            </Col>
+            <Col>
+            <label htmlFor="" className={styles.form_label}>Jersey Number</label>
+              <Form.Control type="text"  name="number" onChange={handleInputChange} className={styles.form_input} />
+            </Col>
+          </Row>
+          <Row className={styles.form_row}>
+            <Col>
+            <label htmlFor="" className={styles.form_label}>Height</label>
+              <Form.Control type="text"  name="height" onChange={handleInputChange} className={styles.form_input} />
+            </Col>
+            <Col>
+            <label htmlFor="" className={styles.form_label}>Weight</label>
+              <Form.Control type="text"  name="weight" onChange={handleInputChange} className={styles.form_input} />
+            </Col>
+          </Row>
+          <Row className={styles.form_row}>
+            <Col>
+            <label htmlFor="" className={styles.form_label}>Nationality</label>
+              <Form.Control as="select" name="nationality" onChange={handleInputChange} className={styles.form_input}>
+                <option value="" style={{background:"#494949" }}>Select Nationality</option>
+                <option value="option1" style={{background:"#494949"}}>India</option>
+                <option value="option2" style={{background:"#494949"}}>USA</option>
+                <option value="option3" style={{background:"#494949"}}>portugal</option>
+              </Form.Control>
+            </Col>
+          </Row>
+          <Row className={styles.form_row}>
+            <Col>
+            <label htmlFor="" className={styles.form_label}>Poisiton</label>
+              <Form.Control as="select" name="position" onChange={handleInputChange} className={styles.form_input}>
+                <option value=""  style={{background:"#494949" }}>Select Position</option>
+                <option value="position1"  style={{background:"#494949" }}>GoalKeeper</option>
+                <option value="position2"  style={{background:"#494949" }}>Defender</option>
+                <option value="position3"  style={{background:"#494949" }}>MiddleFielder</option>
+                <option value="position4"  style={{background:"#494949" }}>Forward</option>
+              </Form.Control>
+            </Col>
+          </Row>
+          <Row className={styles.form_row}>
+            <Col className={styles.formData_radio}>
+            <label htmlFor="" className={styles.form_label}>Starter</label>
+              <Form.Check
+                type="radio"
+                label="Yes"
+                name="Starter"
+                value="yes"
+                onChange={handleInputChange}
+                className={styles.r_btn}
+              />
+              <Form.Check
+                type="radio"
+                label="No"
+                name="Starter"
+                value="no"
+                onChange={handleInputChange}
+                className={styles.r_btn}
+              />
+            </Col>
+          </Row>
+        </Form>
+  )
+
+  
+
+  const renderModal = () =>{
+
+    if(isModalOpen){
+        return renderImportModal;
+    }
+    else if (isActionModal){
+      return renderActionModal;
+    }
+    else if (isDelete){
+      return renderDeleteModal;
+    }
+    else if(isEdit){
+      return renderEditForm;
+    }
+  
+  }
 
 
 
@@ -149,7 +338,9 @@ const LandPage = () => {
             <div
               className={`col-md-2 d-flex align-items-center justify-content-end ${styles.btn}`}
             >
-              <button className={styles.import_btn} onClick={modalAction}>
+              <button className={styles.import_btn} onClick={()=>{
+                setModalOpen(true);
+              }}>
                 import Team
               </button>
             </div>
@@ -214,8 +405,10 @@ const LandPage = () => {
                       <td className={styles.row}>{player.Nationality}</td>
                       <td className={styles.row}>{player.Appearances}</td>
                       <td className={styles.row}>{player['Minutes Played']}</td>
-                      <td className={styles.row}
-                      >
+                      <td className={styles.row} style={{cursor:'pointer'}}
+                      onClick={()=>{
+                        setIsActionModal(true);
+                      }}>
                         ...
                       </td>
                     </tr>
@@ -227,7 +420,9 @@ const LandPage = () => {
                 <p className={styles.empty_title}>
                   You do not have any players on the Roaster.
                 </p>
-                <button className={styles.import_link} onClick={modalAction}>
+                <button className={styles.import_link} onClick={()=>{
+                setModalOpen(true);
+              }}>
                   import Team
                 </button>
               </div>
@@ -236,43 +431,16 @@ const LandPage = () => {
         </main>
       </div>
 
-      {isModalOpen && (
+      {(isModalOpen || isActionModal || isDelete || isEdit) && (
         <>
           {
-            <Modal onClose={modalAction} size={'md'} icon={true}>
-              <div className={styles.import_container}>
-                <h3 className={styles.import_head}>Importer</h3>
-                <p>Roster File</p>
-                <div class='input-group mb-3'>
-                  <input
-                    id='file-input'
-                    type='file'
-                    class='form-control'
-                    placeholder='No file Selected'
-                    aria-label="Recipient's username"
-                    aria-describedby='basic-addon2'
-                    className={styles.import_input}
-                    onChange={handleFileUpload}
-                  />
-                  <div
-                    class='input-group-append'
-                    className={styles.import_input}
-                  >
-                    <label
-                      htmlFor='file-input'
-                      class='input-group-text'
-                      id='basic-addon2'
-                      className={styles.imp_btn}
-                    >
-                      Select File
-                    </label>
-                  </div>
-                </div>
-                <p style={{ color: '#7e7e7e' }}>File must be .csv file</p>
-              </div>
-              <div className={styles.footer_btn}>
-                <button>import</button>
-              </div>
+            <Modal
+             onClose={()=>{
+              isModalOpen ? modalAction('import') 
+              : isActionModal ? modalAction('action'):
+               isDelete ? modalAction('delete') : modalAction('edit')
+            }} size={(isModalOpen) ? 'md' : isActionModal ? 'xsm' : isEdit ? 'xmd' : 'sm'} icon={ true}>
+              {renderModal()}
             </Modal>
           }
         </>

@@ -202,3 +202,81 @@ z-index: 1000;
 display: block;
 }
 
+.action_container{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.sub_action{
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 5px 10px;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.sub_action:hover{
+  background-color: #7e7e7e;
+}
+
+.cancel_btn{
+  background-color: transparent;
+  padding: 7px 10px;
+  border: 1px solid #494949;
+  color: #cbcbcb;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.delete_btn{
+  border: none;
+  outline: none;
+  background-color: #d23131;
+  padding: 7px 10px;
+  border: 1px solid #494949;
+  color: #cbcbcb;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.action_btn{
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+
+}
+.delete_container h4{
+  margin-bottom: 15px;
+}
+.delete_container p{
+  font-size: 14px;
+  color: #cbcbcb;
+  margin-bottom: 35px;
+  line-height: 22px;
+}
+.form_label{
+  margin-bottom: 10px;
+}
+.form_row{
+  margin-bottom: 10px;
+}
+.form_input{
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid #494949;
+}
+.form_input:focus{
+  background-color: transparent;
+  color: #fff;
+}
+.formData_radio{
+  display: flex;
+  gap: 5px;
+}
+.formData_radio label{
+  margin-right: 15px;
+}
+.r_btn:checked{
+ background-color: #fea013;
+}
+
+

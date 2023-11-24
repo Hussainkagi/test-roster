@@ -9,7 +9,7 @@ const Modal = ({ children, onClose , size , icon }) => {
 
   return (
     <div className={styles.modal_overlay}>
-      <div className={`${styles.modal_content}`} style={{ backgroundColor: '#2d2d2d', width : size=='md' ? '1000px' : '400px' }}>
+      <div className={`${styles.modal_content}`} style={{ backgroundColor: '#2d2d2d', width : size=='md' ? '1000px' : size=='xsm' ?'250px' : size=='xmd' ? '500px' :'400px' }}>
         {icon && <button className={styles.close_button} onClick={onClose}>
           <UilTimes size="24" color="#fff" />
         </button>}
