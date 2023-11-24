@@ -6,9 +6,6 @@ import styles from '../Styles/landpage.module.css';
 import Modal from './Modal';
 import * as Papa from 'papaparse';
 import 'bootstrap/dist/css/bootstrap.min.css';
- // Import Bootstrap CSS
-import tippy from 'tippy.js';
-import 'tippy.js/dist/tippy.css';
 import { useDispatch } from 'react-redux';
 import { setCsvData } from '@/Global/cvAction';
 
