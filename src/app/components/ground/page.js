@@ -23,9 +23,12 @@ const ground = () => {
     setModalOpen(!isModalOpen);
   };
 
-  // useEffect(()=>{
-  //   console.log("ground",csvData)
-  // },[])
+  useEffect(()=>{
+    const savedTransformedData = localStorage.getItem('transformedData');
+const transformedData = savedTransformedData ? JSON.parse(savedTransformedData) : [];
+
+
+  },[])
   return (
     <Provider store={store}>
     <div className='d-flex'>

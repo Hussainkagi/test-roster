@@ -292,4 +292,29 @@ display: block;
   justify-content: flex-end;
 }
 
+.field_summary{
+  display: flex;
+  flex-direction: column;
+}
+.field_head{
+  display: flex;
+  justify-content: flex-start;
+  gap: 50px;
+  margin-top: 20px;
+}
+.field_head div{
+  display: flex;
+  flex-direction: column;
+  color: #cbcbcb;
+  gap: 1rem;
+
+}
+.field_summary{
+  margin-top: 30px;
+}
+
+.field_summary h6{
+  color: #f8f8f8;
+}
+
 
