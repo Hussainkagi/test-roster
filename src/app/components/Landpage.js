@@ -87,9 +87,14 @@ const LandPage = () => {
 
   useEffect(()=>{
     const savedTransformedData = sessionStorage.getItem('transformedData');
+    const changedTeamName = sessionStorage.getItem('TeamName');
 
+    if(changedTeamName){
+      setIsNameChanged(true);
+    }
     const handleBeforeUnload = () => {
       sessionStorage.removeItem('transformedData');
+      sessionStorage.removeItem('TeamName');
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -125,7 +130,7 @@ const LandPage = () => {
   };
 
   const modalAction = (pass) => {
-    // debugger;
+   
     switch (pass) {
       case 'import':
         setModalOpen(false);
@@ -241,6 +246,7 @@ const LandPage = () => {
 
   const handleTeaChange = (e) => {
     setTeamName(e.target.value);
+    sessionStorage.setItem('TeamName', JSON.stringify(e.target.value));
     setIsChanging(true);
   };
 
@@ -564,6 +570,7 @@ const LandPage = () => {
                   value={teamName}
                   onChange={handleTeaChange}
                   className={`form-control ${styles.teamInput}`}
+                  required
                 />
                 <label htmlFor='teamName'>
                   {!isChanging
@@ -579,7 +586,7 @@ const LandPage = () => {
                           size='23px'
                           color='#fff'
                           onClick={() => {
-                            setIsNameChanged(true), setIsNameChanged(true);
+                            teamName.length>0 && setIsNameChanged(true);
                           }}
                         />
                       )}

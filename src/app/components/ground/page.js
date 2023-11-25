@@ -17,7 +17,7 @@ const ground = () => {
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [data , setData] = useState([]);
-
+  const [teamName , setTeamName] = useState('Team Name');
   const [playerData , setPlayerData] = useState(null);
 
   
@@ -35,7 +35,7 @@ const ground = () => {
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     const savedTransformedData = sessionStorage.getItem('transformedData');
-
+    setTeamName(sessionStorage.getItem('TeamName'));
     if(savedTransformedData){
       const transformedData = savedTransformedData ? JSON.parse(savedTransformedData) : [];
       setData(transformedData);
@@ -63,7 +63,7 @@ const ground = () => {
               <div className='d-flex justify-content-left align-items-center'>
                 <input
                   type='text'
-                  value='Team Name'
+                  value={teamName}
                   className={`form-control ${styles.teamInput}`}
                 />
                 {/* <UilPen size='18px' color='#fff' /> */}
