@@ -22,29 +22,57 @@ const LandPage = () => {
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
   const [csvData1, setCsvDataPlayer] = useState([]);
+  const [selectedPlayer , setSelectedPlayer] = useState(null);
+  const [isChange,setIsChange] = useState(false);
+  const [searchQuery , setSearchQuery] = useState('');
 
   const [formData, setFormData] = useState({
-    name: '',
-    number: '',
-    height: '',
-    weight: '',
-    nationality: '',
-    position: '',
-    starter: '',
+    'Flag Image' : '',
+    'Player Name': '',
+    'Jersey Number': '',
+    'Height': '',
+    'Weight': '',
+    'Nationality': '',
+    'Position': '',
+    'Starter': '',
+    'Appearances':'',
+    'Minutes Played':''
   });
+
+  const nationality = [
+    'Costa Rica', 'Morocco','French','Spanish','Brazilian','Italian','Argentina','Guinea-Bissau'
+  ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+
+    setIsChange(true);
   };
  
-
+  let displayPlayers = [];
   const csvData = useSelector((state) => state.csv.csvData);
 
 
 
+  useEffect(()=>{
+    const filteredPlayers = csvData.filter((player) =>
+    player['Player Name'].toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+   displayPlayers = searchQuery.length> 0 ? filteredPlayers : csvData;
 
 
+   setCsvDataPlayer(displayPlayers);
+
+  
+    
+  },[searchQuery])
+
+
+
+  
   const modalAction = (pass) => {
     // debugger;
     switch(pass){
@@ -61,8 +89,6 @@ const LandPage = () => {
     
   };
   
-
-
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
 
@@ -96,6 +122,36 @@ const LandPage = () => {
     });
   };
 
+  const handleDelete = () => {
+    const updatedPlayerData = csvData.filter(
+      (p) => p['Jersey Number'] !== selectedPlayer['Jersey Number']
+    );
+  
+    setCsvDataPlayer(updatedPlayerData);
+    dispatch(setCsvData(updatedPlayerData));
+  
+    setSelectedPlayer(null);
+  
+    setIsActionModal(false);
+  };
+
+  const handleEdit = () => {
+    setFormData({
+      'Flag Image': selectedPlayer['Flag Image'],
+      'Player Name' : selectedPlayer['Player Name'],
+      'Jersey Number': selectedPlayer['Jersey Number'],
+      'Height': selectedPlayer.Height,
+      'Weight': selectedPlayer.Weight,
+      'Nationality': selectedPlayer.Nationality,
+      'Position': selectedPlayer.Position,
+      'Starter': selectedPlayer.Starter,
+      'Appearances' : selectedPlayer.Appearances,
+      'Minutes Played':selectedPlayer['Minutes Played']
+
+    });
+  
+  };
+
 
   const fetchData = async () => {
     try {
@@ -116,6 +172,20 @@ const LandPage = () => {
   const handleTeaChange = (e) => {
     setTeamName(e.target.value);
     setIsChanging(true);
+  };
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+  debugger
+    const updatedPlayerData = csvData.map((player) =>
+      player['Jersey Number'] === selectedPlayer['Jersey Number'] ? formData : player
+    );
+    dispatch(setCsvData(updatedPlayerData));
+    setCsvDataPlayer(updatedPlayerData);
+    setSelectedPlayer(null);
+    setIsChange(false);
+    setIsEdit(false);
+    setIsActionModal(false);
   };
 
   const renderImportModal = (
@@ -156,6 +226,7 @@ const LandPage = () => {
               </>
   )
 
+
   const renderDeleteModal = (
           <div className={styles.delete_container}>
             <h4>Are you sure ?</h4>
@@ -164,7 +235,7 @@ const LandPage = () => {
 
             <div className={styles.action_btn}>
               <button className={styles.cancel_btn} onClick={()=> setIsDelete(false)}>Cancel</button>
-              <button className={styles.delete_btn}>Delete</button>
+              <button className={styles.delete_btn} onClick={()=>{handleDelete(),setIsDelete(false);}}>Delete</button>
             </div>
           </div>
   )
@@ -176,6 +247,7 @@ const LandPage = () => {
 
               setIsEdit(true);
               setIsActionModal(false);
+              handleEdit();
             }}>
               <UilPen size='18px' color='#999999'/> Edit
             </div>
@@ -194,43 +266,43 @@ const LandPage = () => {
           <Row className={styles.form_row}>
             <Col className=''>
             <label htmlFor="" className={styles.form_label}>Player Name</label>
-              <Form.Control type="text"  name="name" onChange={handleInputChange} className={styles.form_input} />
+              <Form.Control type="text"  name="Player Name" onChange={handleInputChange} className={styles.form_input} value={formData['Player Name']} />
             </Col>
             <Col>
             <label htmlFor="" className={styles.form_label}>Jersey Number</label>
-              <Form.Control type="text"  name="number" onChange={handleInputChange} className={styles.form_input} />
+              <Form.Control type="text"  name="Jersey Number" onChange={handleInputChange} className={styles.form_input} value={formData['Jersey Number']} />
             </Col>
           </Row>
           <Row className={styles.form_row}>
             <Col>
             <label htmlFor="" className={styles.form_label}>Height</label>
-              <Form.Control type="text"  name="height" onChange={handleInputChange} className={styles.form_input} />
+              <Form.Control type="text"  name="Height" onChange={handleInputChange} className={styles.form_input} value={formData.Height}/>
             </Col>
             <Col>
             <label htmlFor="" className={styles.form_label}>Weight</label>
-              <Form.Control type="text"  name="weight" onChange={handleInputChange} className={styles.form_input} />
+              <Form.Control type="text"  name="Weight" onChange={handleInputChange} className={styles.form_input} value={formData.Weight}/>
             </Col>
           </Row>
           <Row className={styles.form_row}>
             <Col>
             <label htmlFor="" className={styles.form_label}>Nationality</label>
-              <Form.Control as="select" name="nationality" onChange={handleInputChange} className={styles.form_input}>
+              <Form.Control as="select" name="Nationality" onChange={handleInputChange} className={styles.form_input} value={formData.Nationality}>
                 <option value="" style={{background:"#494949" }}>Select Nationality</option>
-                <option value="option1" style={{background:"#494949"}}>India</option>
-                <option value="option2" style={{background:"#494949"}}>USA</option>
-                <option value="option3" style={{background:"#494949"}}>portugal</option>
+                {nationality.map((item)=>(
+                  <option value={item} style={{background:'#494949'}}>{item}</option>
+                ))}
               </Form.Control>
             </Col>
           </Row>
           <Row className={styles.form_row}>
             <Col>
             <label htmlFor="" className={styles.form_label}>Poisiton</label>
-              <Form.Control as="select" name="position" onChange={handleInputChange} className={styles.form_input}>
+              <Form.Control as="select" name="Position" onChange={handleInputChange} className={styles.form_input} value={formData.Position}>
                 <option value=""  style={{background:"#494949" }}>Select Position</option>
-                <option value="position1"  style={{background:"#494949" }}>GoalKeeper</option>
-                <option value="position2"  style={{background:"#494949" }}>Defender</option>
-                <option value="position3"  style={{background:"#494949" }}>MiddleFielder</option>
-                <option value="position4"  style={{background:"#494949" }}>Forward</option>
+                <option value="GoalKeeper"  style={{background:"#494949" }}>GoalKeeper</option>
+                <option value="Defender"  style={{background:"#494949" }}>Defender</option>
+                <option value="MiddleFielder"  style={{background:"#494949" }}>MiddleFielder</option>
+                <option value="Forward"  style={{background:"#494949" }}>Forward</option>
               </Form.Control>
             </Col>
           </Row>
@@ -241,20 +313,35 @@ const LandPage = () => {
                 type="radio"
                 label="Yes"
                 name="Starter"
-                value="yes"
+                value="Yes"
                 onChange={handleInputChange}
                 className={styles.r_btn}
+                checked={formData.Starter === 'Yes'}
               />
               <Form.Check
                 type="radio"
                 label="No"
                 name="Starter"
-                value="no"
+                value="No"
                 onChange={handleInputChange}
                 className={styles.r_btn}
+                checked={formData.Starter === 'No'}
               />
             </Col>
           </Row>
+
+          <div className={styles.editBtn_container}>
+            <button className={styles.edit_btn}
+            type='submit'
+            onClick={handleEditSubmit}
+            style={{
+              backgroundColor : isChange ? '#fea013' : 'transparent',
+              color : isChange ? '#fff' : '#7e7e7e',
+              border : !isChange ? 'none' : '',
+            }}
+            >
+              Edit Player</button>
+          </div>
         </Form>
   )
 
@@ -276,6 +363,9 @@ const LandPage = () => {
     }
   
   }
+
+
+
 
 
 
@@ -331,6 +421,8 @@ const LandPage = () => {
                   id='inputBox'
                   type='text'
                   placeholder='Search For Products'
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </div>
@@ -387,7 +479,7 @@ const LandPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {csvData.map((player, rowIndex) => (
+                  {csvData1.map((player, rowIndex) => (
                     <tr key={rowIndex}>
                       <td className={styles.row}>
                         <img
@@ -408,6 +500,7 @@ const LandPage = () => {
                       <td className={styles.row} style={{cursor:'pointer'}}
                       onClick={()=>{
                         setIsActionModal(true);
+                        setSelectedPlayer(player);
                       }}>
                         ...
                       </td>

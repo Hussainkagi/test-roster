@@ -278,5 +278,18 @@ display: block;
 .r_btn:checked{
  background-color: #fea013;
 }
+.edit_btn{
+  border: none;
+  outline: none;
+  padding: 7px 10px;
+  border: 1px solid #494949;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.editBtn_container{
+  display: flex;
+  justify-content: flex-end;
+}
 
 
