@@ -1,7 +1,6 @@
 'use client';
 import AppSideBar from '../sidebar';
 import styles from '../../Styles/ground.module.css';
-import { UilPen } from '@iconscout/react-unicons';
 import groundImg from '../../assets/ground.jpg';
 import Image from 'next/image';
 import { UilExclamationTriangle } from '@iconscout/react-unicons'
@@ -10,9 +9,6 @@ import { React, useEffect, useState } from 'react';
 import Modal from '../Modal';
 import store from '@/Global/store';
 import { Provider } from 'react-redux';
-import { useSelector } from 'react-redux';
-
-import ronaldo from '../../assets/ronaldo.png'
 import Link from 'next/link';
 
 
@@ -32,8 +28,12 @@ const ground = () => {
 
   useEffect(()=>{
 
+    const handleBeforeUnload = () => {
+      sessionStorage.removeItem('transformedData');
+    };
 
-debugger
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     const savedTransformedData = sessionStorage.getItem('transformedData');
 
     if(savedTransformedData){
@@ -46,8 +46,9 @@ debugger
       setModalOpen(true);
     }
 
-
-
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
 
   },[])
   return (

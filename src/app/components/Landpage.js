@@ -87,7 +87,12 @@ const LandPage = () => {
 
   useEffect(()=>{
     const savedTransformedData = sessionStorage.getItem('transformedData');
-   
+
+    const handleBeforeUnload = () => {
+      sessionStorage.removeItem('transformedData');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
     if(savedTransformedData){
       const transformedData = savedTransformedData ? JSON.parse(savedTransformedData) : [];
@@ -95,8 +100,16 @@ const LandPage = () => {
       dispatch(setCsvData(transformData(transformedData)));
     }
 
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+
 
   },[])
+
+  useEffect(() => {
+   
+  }, []);
 
   const transformData = (playerObjects) => {
     const transformedData = playerObjects.map((playerObject) => {
