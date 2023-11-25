@@ -24,8 +24,9 @@ const ground = () => {
   };
 
   useEffect(()=>{
-    const savedTransformedData = localStorage.getItem('transformedData');
-const transformedData = savedTransformedData ? JSON.parse(savedTransformedData) : [];
+
+    const savedTransformedData = sessionStorage.getItem('transformedData');
+    const transformedData = savedTransformedData ? JSON.parse(savedTransformedData) : [];
 
 
   },[])

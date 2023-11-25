@@ -84,12 +84,13 @@ const LandPage = () => {
 
 
   useEffect(()=>{
-    const savedTransformedData = localStorage.getItem('transformedData');
+    const savedTransformedData = sessionStorage.getItem('transformedData');
    
 
     if(savedTransformedData){
       const transformedData = savedTransformedData ? JSON.parse(savedTransformedData) : [];
       setCsvDataPlayer(transformedData);
+      dispatch(setCsvData(transformData(transformedData)));
     }
 
 
@@ -155,10 +156,7 @@ const LandPage = () => {
         defender: positionFrequency.Defender || 0,
       });
 
-      localStorage.setItem(
-        'transformedData',
-        JSON.stringify(transformData(playerObjects))
-      );
+      sessionStorage.setItem('transformedData', JSON.stringify(transformData(playerObjects)));
       // setCsvDataPlayer(transformData(playerObjects));
       dispatch(setCsvData(transformData(playerObjects)));
     }
@@ -177,12 +175,14 @@ const LandPage = () => {
     const updatedPlayerData = csvData.filter(
       (p) => p['Jersey Number'] !== selectedPlayer['Jersey Number']
     );
-
+  
+    sessionStorage.setItem('transformedData', JSON.stringify(updatedPlayerData));
+  
     setCsvDataPlayer(updatedPlayerData);
     dispatch(setCsvData(updatedPlayerData));
-
+  
     setSelectedPlayer(null);
-
+  
     setIsActionModal(false);
   };
 
@@ -206,19 +206,41 @@ const LandPage = () => {
     setIsChanging(true);
   };
 
+  // const handleEditSubmit = (e) => {
+  //   e.preventDefault();
+  //   debugger;
+  //   const updatedPlayerData = csvData.map((player) =>
+  //     player['Jersey Number'] === selectedPlayer['Jersey Number']
+  //       ? formData
+  //       : player
+  //   );
+  //   dispatch(setCsvData(updatedPlayerData));
+  //   setCsvDataPlayer(updatedPlayerData);
+  //   setSelectedPlayer(null);
+  //   setIsChange(false);
+  //   setIsEdit(false);
+  //   setIsActionModal(false);
+  // };
+
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    debugger;
+  
+    // Update the state with the edited player information
     const updatedPlayerData = csvData.map((player) =>
-      player['Jersey Number'] === selectedPlayer['Jersey Number']
-        ? formData
-        : player
+      player['Jersey Number'] === selectedPlayer['Jersey Number'] ? formData : player
     );
-    dispatch(setCsvData(updatedPlayerData));
+  
+    // Update session storage after editing the player
+    sessionStorage.setItem('transformedData', JSON.stringify(updatedPlayerData));
+  
     setCsvDataPlayer(updatedPlayerData);
-    setSelectedPlayer(null);
+    dispatch(setCsvData(updatedPlayerData));
+  
+    // Reset isChange to false after submitting changes
     setIsChange(false);
     setIsEdit(false);
+    setSelectedPlayer(null);
+  
     setIsActionModal(false);
   };
 
