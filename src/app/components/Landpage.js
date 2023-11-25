@@ -85,9 +85,10 @@ const LandPage = () => {
 
   useEffect(()=>{
     const savedTransformedData = localStorage.getItem('transformedData');
-    const transformedData = savedTransformedData ? JSON.parse(savedTransformedData) : [];
+   
 
-    if(transformedData.length>0){
+    if(savedTransformedData){
+      const transformedData = savedTransformedData ? JSON.parse(savedTransformedData) : [];
       setCsvDataPlayer(transformedData);
     }
 
@@ -581,7 +582,7 @@ const LandPage = () => {
 
           <div
             className={`col-md-12 ${styles.tableBody}`}
-            style={{ overflowY: csvData.length > 0 ? 'scroll' : '' }}
+            style={{ overflowY: csvData1.length > 0 ? 'scroll' : '' }}
           >
             {csvData1.length > 0 ? (
               <table className={`table table-dark ${styles.table}`}>
