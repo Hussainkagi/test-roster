@@ -24,6 +24,8 @@ const LandPage = () => {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [isChange, setIsChange] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [error, setError] = useState(false);
+  const [correctFile,setCorrectFile] = useState(false);
 
   const [formData, setFormData] = useState({
     'Flag Image': '',
@@ -127,38 +129,57 @@ const LandPage = () => {
     const file = event.target.files[0];
 
     if (file) {
-      const data = await fetchCsv(file);
-      const parsedData = Papa.parse(data);
 
-      console.log(parsedData);
+      if(file.type === 'text/csv' ||  file.name.endsWith('.csv')){
 
-      const headers = parsedData.data[0];
 
-      const playerObjects = parsedData.data.slice(1).map((playerData) => {
-        const playerObject = {};
-        headers.forEach((header, index) => {
-          playerObject[header] = playerData[index];
+        const data = await fetchCsv(file);
+        const parsedData = Papa.parse(data);
+  
+        console.log(parsedData);
+  
+        const headers = parsedData.data[0];
+  
+        const playerObjects = parsedData.data.slice(1).map((playerData) => {
+          const playerObject = {};
+          headers.forEach((header, index) => {
+            playerObject[header] = playerData[index];
+          });
+          return playerObject;
         });
-        return playerObject;
-      });
+  
+        const positionFrequency = playerObjects.reduce((acc, player) => {
+          const position = player.Position;
+          acc[position] = (acc[position] || 0) + 1;
+          return acc;
+        }, {});
+  
+        setSummary({
+          total: playerObjects.length,
+          goalkeeper: positionFrequency.Goalkeeper || 0,
+          forward: positionFrequency.Forward || 0,
+          midfielder: positionFrequency.Midfielder || 0,
+          defender: positionFrequency.Defender || 0,
+        });
+  
+        sessionStorage.setItem('transformedData', JSON.stringify(transformData(playerObjects)));
+        
+        dispatch(setCsvData(transformData(playerObjects)));
 
-      const positionFrequency = playerObjects.reduce((acc, player) => {
-        const position = player.Position;
-        acc[position] = (acc[position] || 0) + 1;
-        return acc;
-      }, {});
+        setError(false);
+        setCorrectFile(true);
+      }
 
-      setSummary({
-        total: playerObjects.length,
-        goalkeeper: positionFrequency.Goalkeeper || 0,
-        forward: positionFrequency.Forward || 0,
-        midfielder: positionFrequency.Midfielder || 0,
-        defender: positionFrequency.Defender || 0,
-      });
 
-      sessionStorage.setItem('transformedData', JSON.stringify(transformData(playerObjects)));
-      // setCsvDataPlayer(transformData(playerObjects));
-      dispatch(setCsvData(transformData(playerObjects)));
+      else{
+        //set error
+        setError(true);
+        setCorrectFile(false);
+      }
+
+
+
+   
     }
   };
   const fetchCsv = async (file) => {
@@ -206,37 +227,18 @@ const LandPage = () => {
     setIsChanging(true);
   };
 
-  // const handleEditSubmit = (e) => {
-  //   e.preventDefault();
-  //   debugger;
-  //   const updatedPlayerData = csvData.map((player) =>
-  //     player['Jersey Number'] === selectedPlayer['Jersey Number']
-  //       ? formData
-  //       : player
-  //   );
-  //   dispatch(setCsvData(updatedPlayerData));
-  //   setCsvDataPlayer(updatedPlayerData);
-  //   setSelectedPlayer(null);
-  //   setIsChange(false);
-  //   setIsEdit(false);
-  //   setIsActionModal(false);
-  // };
-
   const handleEditSubmit = (e) => {
     e.preventDefault();
   
-    // Update the state with the edited player information
     const updatedPlayerData = csvData.map((player) =>
       player['Jersey Number'] === selectedPlayer['Jersey Number'] ? formData : player
     );
   
-    // Update session storage after editing the player
     sessionStorage.setItem('transformedData', JSON.stringify(updatedPlayerData));
   
     setCsvDataPlayer(updatedPlayerData);
     dispatch(setCsvData(updatedPlayerData));
   
-    // Reset isChange to false after submitting changes
     setIsChange(false);
     setIsEdit(false);
     setSelectedPlayer(null);
@@ -257,10 +259,10 @@ const LandPage = () => {
             placeholder='No file Selected'
             aria-label="Recipient's username"
             aria-describedby='basic-addon2'
-            className={styles.import_input}
+            className={!error ? styles.import_input : styles.import_input_error}
             onChange={handleFileUpload}
           />
-          <div class='input-group-append' className={styles.import_input}>
+          <div class='input-group-append' className={!error ? styles.import_input : styles.import_input_error}>
             <label
               htmlFor='file-input'
               class='input-group-text'
@@ -271,10 +273,11 @@ const LandPage = () => {
             </label>
           </div>
         </div>
-        <p style={{ color: '#7e7e7e' }}>File must be .csv file</p>
+        {error && <p style={{color:'red'}}>Error</p>}
+        {<p style={{ color: '#7e7e7e' }}>File must be .csv file</p>}
       </div>
 
-      {
+      { correctFile &&
         <div className={styles.field_summary}>
           <h6>Field Summary</h6>
           <div className={styles.field_head}>
@@ -304,6 +307,7 @@ const LandPage = () => {
 
       <div className={styles.footer_btn}>
         <button
+          className={correctFile ? styles.acs_btn : styles.no_acs_btn}
           onClick={() => {
             setModalOpen(false);
             setCsvDataPlayer(csvData);
@@ -590,12 +594,12 @@ const LandPage = () => {
               className={`col-md-2 d-flex align-items-center justify-content-end ${styles.btn}`}
             >
               <button
-                className={styles.import_btn}
+                className={csvData1.length > 0 ? styles.re_import_button :styles.import_btn}
                 onClick={() => {
                   setModalOpen(true);
                 }}
               >
-                import Team
+                {csvData1.length > 0  ? 'Re-import Team'  : 'import Team'}
               </button>
             </div>
           </div>

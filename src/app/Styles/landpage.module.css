@@ -89,6 +89,16 @@
   outline: none;
   border: none;
 }
+.re_import_button{
+  height: 44px;
+  width: 132px;
+  font-size: 14px;
+  background-color: transparent;
+  border-radius: 8px;
+  color: #fff;
+  outline: none;
+  border: 1px solid #494949;
+}
 
 .tableBody {
   border-radius: 8px;
@@ -168,6 +178,12 @@
   border: 1px solid #494949;
   border-radius: 8px;
 }
+.import_input_error{
+  background-color: transparent;
+  padding: 10px;
+  border: 1px solid red;
+  border-radius: 8px;
+}
 
 .imp_btn{
   background-color: transparent;
@@ -178,8 +194,16 @@
   display: flex;
   justify-content: flex-end;
 }
+.acs_btn{
+  background-color: #fea013;
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: #fff;
+  border: none;
+  outline: none;
+}
 
-.footer_btn button{
+.no_acs_btn{
   background: transparent;
   border: none;
   outline: none;
