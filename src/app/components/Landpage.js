@@ -75,7 +75,7 @@ const LandPage = () => {
         player['Player Name']
           .toLowerCase()
           .includes(searchQuery.toLowerCase()) ||
-        player.Position.toLowerCase().includes(searchQuery.toLowerCase())
+        player?.Position?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     displayPlayers = searchQuery.length > 0 ? filteredPlayers : csvData;
@@ -125,6 +125,8 @@ const LandPage = () => {
     }
   };
 
+ 
+
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
 
@@ -135,8 +137,10 @@ const LandPage = () => {
 
         const data = await fetchCsv(file);
         const parsedData = Papa.parse(data);
-  
-        console.log(parsedData);
+        
+      
+
+
   
         const headers = parsedData.data[0];
   
@@ -701,6 +705,7 @@ const LandPage = () => {
           {
             <Modal
               onClose={() => {
+                setCorrectFile(false);
                 isModalOpen
                   ? modalAction('import')
                   : isActionModal
