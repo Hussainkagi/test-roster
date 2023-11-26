@@ -1,0 +1,30 @@
+.toaster {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999; /* Ensure the toaster is above other elements */
+  }
+  
+  .toaster.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+    outline: none;
+  }
+  

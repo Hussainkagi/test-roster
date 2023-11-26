@@ -10,6 +10,8 @@ import { useDispatch } from 'react-redux';
 import { setCsvData } from '@/Global/cvAction';
 import { Form, Row, Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import Toaster from './Toaster';
+
 
 const LandPage = () => {
   const dispatch = useDispatch();
@@ -26,7 +28,8 @@ const LandPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState(false);
   const [correctFile,setCorrectFile] = useState(false);
-
+  const [showToast , setShowToast] = useState(false);
+  const [toastMessage , setToastMessage] = useState('');
   const [formData, setFormData] = useState({
     'Flag Image': '',
     'Player Name': '',
@@ -66,6 +69,18 @@ const LandPage = () => {
     setIsChange(true);
   };
 
+
+  const AddToast = (message) =>{
+
+    setShowToast(true);
+    setToastMessage(message);
+    setTimeout(()=>{
+      setShowToast(false);
+      setToastMessage('');
+    },500)
+    
+  }
+
   let displayPlayers = [];
   const csvData = useSelector((state) => state.csv.csvData);
 
@@ -92,12 +107,7 @@ const LandPage = () => {
     if(changedTeamName){
       setIsNameChanged(true);
     }
-    // const handleBeforeUnload = () => {
-    //   sessionStorage.removeItem('transformedData');
-    //   sessionStorage.removeItem('TeamName');
-    // };
-
-    // window.addEventListener('beforeunload', handleBeforeUnload);
+    
 
     if(savedTransformedData){
       const transformedData = savedTransformedData ? JSON.parse(savedTransformedData) : [];
@@ -221,6 +231,8 @@ const LandPage = () => {
   
     setCsvDataPlayer(updatedPlayerData);
     dispatch(setCsvData(updatedPlayerData));
+
+    AddToast('Deleted Successfully');
   
     setSelectedPlayer(null);
   
@@ -263,7 +275,7 @@ const LandPage = () => {
     setIsChange(false);
     setIsEdit(false);
     setSelectedPlayer(null);
-  
+    AddToast('Updated Successfully');
     setIsActionModal(false);
   };
 
@@ -332,6 +344,7 @@ const LandPage = () => {
           onClick={() => {
             setModalOpen(false);
             setCsvDataPlayer(csvData);
+            AddToast('Import Success!')
           }}
         >
           import
@@ -555,6 +568,7 @@ const LandPage = () => {
 
   return (
     <div className='container-fluid'>
+
       <div className={`row`}>
         <main role='main' className={` ${styles.mainContent}`}>
           <div className={`row d-flex align-items-center ${styles.tabHead}`}>
@@ -611,6 +625,8 @@ const LandPage = () => {
                 />
               </div>
             </div>
+      
+            
 
             <div
               className={`col-md-2 d-flex align-items-center justify-content-end ${styles.btn}`}
@@ -748,6 +764,13 @@ const LandPage = () => {
           }
         </>
       )}
+
+            
+        <div>
+          <Toaster message={toastMessage
+          } trigger={showToast} type={'success'}/>
+        </div>
+
     </div>
   );
 };
