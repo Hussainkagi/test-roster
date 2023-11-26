@@ -92,12 +92,12 @@ const LandPage = () => {
     if(changedTeamName){
       setIsNameChanged(true);
     }
-    const handleBeforeUnload = () => {
-      sessionStorage.removeItem('transformedData');
-      sessionStorage.removeItem('TeamName');
-    };
+    // const handleBeforeUnload = () => {
+    //   sessionStorage.removeItem('transformedData');
+    //   sessionStorage.removeItem('TeamName');
+    // };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    // window.addEventListener('beforeunload', handleBeforeUnload);
 
     if(savedTransformedData){
       const transformedData = savedTransformedData ? JSON.parse(savedTransformedData) : [];
@@ -105,9 +105,7 @@ const LandPage = () => {
       dispatch(setCsvData(transformData(transformedData)));
     }
 
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
+   
 
 
   },[])

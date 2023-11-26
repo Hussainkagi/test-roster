@@ -28,11 +28,7 @@ const ground = () => {
 
   useEffect(()=>{
 
-    const handleBeforeUnload = () => {
-      sessionStorage.removeItem('transformedData');
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
+ 
 
     const savedTransformedData = sessionStorage.getItem('transformedData');
     setTeamName(sessionStorage.getItem('TeamName'));
@@ -46,9 +42,7 @@ const ground = () => {
       setModalOpen(true);
     }
 
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
+  
 
   },[])
   return (
