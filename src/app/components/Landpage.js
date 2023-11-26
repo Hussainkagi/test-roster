@@ -77,7 +77,7 @@ const LandPage = () => {
     setTimeout(()=>{
       setShowToast(false);
       setToastMessage('');
-    },500)
+    },5000)
     
   }
 
@@ -347,7 +347,7 @@ const LandPage = () => {
             AddToast('Import Success!')
           }}
         >
-          import
+          import  
         </button>
       </div>
     </>
@@ -767,8 +767,11 @@ const LandPage = () => {
 
             
         <div>
-          <Toaster message={toastMessage
-          } trigger={showToast} type={'success'}/>
+        <Toaster
+        showMessage={showToast}  // Make sure this is dynamically controlled based on some condition
+        message={toastMessage}
+        onClose={() => {}}
+      />
         </div>
 
     </div>

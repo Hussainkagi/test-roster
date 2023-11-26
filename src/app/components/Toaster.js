@@ -1,47 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import PropTypes from 'prop-types';
+import styles from '../Styles/toaster.module.css';
 
-const Toast = ({ message, trigger, type }) => {
-  const [showToast, setShowToast] = useState(false);
+import { UilCheckCircle } from '@iconscout/react-unicons'
+const Toaster = ({ showMessage, message, onClose }) => {
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (trigger) {
-      toast[type](message, {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'dark',
-      });
+    setVisible(showMessage);
 
-      setShowToast(true);
+    if (showMessage) {
+      const timeoutId = setTimeout(() => {
+        setVisible(false);
+        onClose();
+      }, 3000);
+
+      return () => clearTimeout(timeoutId);
     }
-  }, [message, trigger]);
+  }, [showMessage, onClose]);
 
   return (
-    <div>
-      {showToast && (
-        <ToastContainer
-        
-          position='top-right'
-          autoClose={2000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme='light'
-
-        />
-      )}
+    <div className={`${styles.toaster} ${visible ? styles.show : ''}`}>
+      <span>{message}</span>
+      <UilCheckCircle size = '22px' color='green' className={styles.icon}/>
     </div>
   );
 };
 
-export default Toast;
+Toaster.propTypes = {
+  showMessage: PropTypes.bool.isRequired,
+  message: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export default Toaster;
+
+
+
+
